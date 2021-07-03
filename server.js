@@ -16,7 +16,7 @@ app.use("/api/posts", require("./routes/api/posts"));
 // Connect to Db
 mongoose.connect(
   process.env.DB_Connect,
-  { useNewUrlParser: true, useUnifiedTopology: true },
+  { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true },
   () => {
     console.log("Connected to DB");
   }
