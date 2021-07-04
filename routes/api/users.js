@@ -1,10 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const gravatar = require("gravatar");
-const jwt = require("jsonwebtoken");
 // require("dotenv/config");
 const { check, validationResult } = require("express-validator");
+const JWT = require("jsonwebtoken");
+
 const User = require("../../model/User");
+
+// const { signAccessToken } = require("../../jwt_helper");
 // @route GET api/users
 //  @desc  Test route
 // @access  Public
@@ -55,19 +58,17 @@ router.post(
       // Encrypt password
       await user.save();
 
-      // console.log(password, email, name);
-      // Return jwt
       const payload = {
-        user: {
-          id: user.id,
-        },
+        Id: user.id,
       };
-      jwt.sign(payload, "secret", { expiresIn: 36000 }, (err, token) => {
+      const secret = "some secret";
+      const options = {};
+      JWT.sign(payload, secret, options, (err, token) => {
         if (err) throw err;
-        res.json({ token });
+        res.send({ token });
       });
-      // console.log(token);
-      res.send("User Registerd");
+      // console.log(accessToken);
+      // res.send("User Registerd");
     } catch (err) {
       console.log(err);
       res.status(500).send("Server error");
