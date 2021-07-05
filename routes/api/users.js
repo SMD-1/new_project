@@ -1,13 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const gravatar = require("gravatar");
-// require("dotenv/config");
+require("dotenv/config");
 const { check, validationResult } = require("express-validator");
 const JWT = require("jsonwebtoken");
 
 const User = require("../../model/User");
 
-// const { signAccessToken } = require("../../jwt_helper");
 // @route GET api/users
 //  @desc  Test route
 // @access  Public
@@ -35,6 +34,7 @@ router.post(
     try {
       // check if user already exists
       let user = await User.findOne({ email });
+      // console.log(user);
       if (user) {
         return res
           .status(400)
@@ -55,19 +55,21 @@ router.post(
         password,
       });
 
-      // Encrypt password
       await user.save();
 
       const payload = {
-        Id: user.id,
+        user: {
+          id: user.id,
+          name: name,
+        },
       };
-      const secret = "some secret";
+      const secret = process.env.jwtSecret;
       const options = {};
       JWT.sign(payload, secret, options, (err, token) => {
         if (err) throw err;
         res.send({ token });
+        console.log(token);
       });
-      // console.log(accessToken);
       // res.send("User Registerd");
     } catch (err) {
       console.log(err);
