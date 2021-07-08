@@ -70,7 +70,7 @@ router.post(
       const options = {};
       JWT.sign(payload, secret, options, (err, token) => {
         if (err) throw err;
-        res.send({ token });
+        res.json({ token });
         console.log(token);
       });
       // res.send("User Registerd");
