@@ -88,25 +88,18 @@ router.post(
 
     // Build Social Object
     profileFields.social = {};
-    if (youtube) {
-      profileFields.social.youtube = youtube;
-    }
-    if (twitter) {
-      profileFields.social.twitter = twitter;
-    }
-    if (facebook) {
-      profileFields.social.facebook = facebook;
-    }
-    if (linkedin) {
-      profileFields.social.linkedin = linkedin;
-    }
-    if (instagram) {
-      profileFields.social.instagram = instagram;
-    }
+    if (youtube) profileFields.social.youtube = youtube;
+
+    if (twitter) profileFields.social.twitter = twitter;
+
+    if (facebook) profileFields.social.facebook = facebook;
+
+    if (linkedin) profileFields.social.linkedin = linkedin;
+
+    if (instagram) profileFields.social.instagram = instagram;
 
     try {
-      let profile = Profile.findOne({ user: req.user.id });
-
+      let profile = await Profile.findOne({ user: req.user.id });
       if (profile) {
         // Update
         profile = await Profile.findOneAndUpdate(
@@ -117,9 +110,11 @@ router.post(
 
         return res.json(profile);
       }
+      //   console.log("23djdh");
 
-      // Create
+      //   // Create
       profile = new Profile(profileFields);
+
       await profile.save();
       res.json(profile);
     } catch (err) {
